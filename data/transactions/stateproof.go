@@ -28,15 +28,17 @@ import (
 type StateProofTxnFields struct {
 	_struct struct{} `codec:",omitempty,omitemptyarray"`
 
-	StateProofType protocol.StateProofType `codec:"sptype"`
-	StateProof     stateproof.StateProof   `codec:"sp"`
-	Message        stateproofmsg.Message   `codec:"spmsg"`
+	StateProofIntervalLastRound basics.Round            `codec:"sprnd"`
+	StateProofType              protocol.StateProofType `codec:"sptype"`
+	StateProof                  stateproof.StateProof   `codec:"sp"`
+	Message                     stateproofmsg.Message   `codec:"spmsg"`
 }
 
 // Empty returns whether the StateProofTxnFields are all zero,
 // in the sense of being omitted in a msgpack encoding.
 func (sp StateProofTxnFields) Empty() bool {
-	return sp.StateProofType == protocol.StateProofBasic &&
+	return sp.StateProofIntervalLastRound == 0 &&
+		sp.StateProofType == protocol.StateProofBasic &&
 		sp.StateProof.MsgIsZero() &&
 		sp.Message.MsgIsZero()
 }

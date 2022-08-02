@@ -353,8 +353,9 @@ func assetFreezeTxEncode(tx transactions.Transaction, ad transactions.ApplyData)
 
 func stateProofTxEncode(tx transactions.Transaction) v1.Transaction {
 	sp := v1.StateProofTransactionType{
-		StateProof:        protocol.Encode(&tx.StateProofTxnFields.StateProof),
-		StateProofMessage: protocol.Encode(&tx.Message),
+		StateProofIntervalLatestRound: uint64(tx.StateProofTxnFields.StateProofIntervalLastRound),
+		StateProof:                    protocol.Encode(&tx.StateProofTxnFields.StateProof),
+		StateProofMessage:             protocol.Encode(&tx.Message),
 	}
 
 	return v1.Transaction{
