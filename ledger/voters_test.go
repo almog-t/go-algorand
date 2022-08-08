@@ -110,7 +110,6 @@ func TestLimitVoterTracker(t *testing.T) {
 
 	intervalForTest := config.Consensus[protocol.ConsensusFuture].StateProofInterval
 	recoveryIntervalForTests := config.Consensus[protocol.ConsensusFuture].StateProofMaxRecoveryIntervals
-	numOfIntervals := recoveryIntervalForTests
 	lookbackForTest := config.Consensus[protocol.ConsensusFuture].StateProofVotersLookback
 
 	accts := []map[basics.Address]basics.AccountData{ledgertesting.RandomAccounts(20, true)}
@@ -134,35 +133,38 @@ func TestLimitVoterTracker(t *testing.T) {
 	defer ao.close()
 
 	i := uint64(1)
-	// adding blocks to the voterstracker (in order to pass the numOfIntervals*stateproofInterval we add 1)
-	for ; i < (numOfIntervals*intervalForTest)+1; i++ {
+
+	// since the first state proof is expected to happen on stateproofInterval*2 we would start give-up on state proofs
+	// after intervalForTest*(recoveryIntervalForTests+3)
+
+	// should not give up on any state proof
+	for ; i < intervalForTest*(recoveryIntervalForTests+2); i++ {
 		block := randomBlock(basics.Round(i))
 		block.block.CurrentProtocol = protocol.ConsensusFuture
 		addBlockToAccountsUpdate(block.block, ao)
 	}
 
-	a.Equal(recoveryIntervalForTests, uint64(len(ao.voters.votersForRoundCache)))
-	a.Equal(basics.Round(((i/intervalForTest)-recoveryIntervalForTests+1)*intervalForTest-lookbackForTest), ao.voters.lowestRound(basics.Round(i)))
+	a.Equal(recoveryIntervalForTests+2, uint64(len(ao.voters.votersForRoundCache)))
+	//a.Equal(basics.Round(((i/intervalForTest)-recoveryIntervalForTests+1)*intervalForTest-lookbackForTest), ao.voters.lowestRound(basics.Round(i)))
 
 	// we add numOfIntervals*intervalForTest more blocks. the voter should have only recoveryIntervalForTests number of elements
-	for ; i < 2*(numOfIntervals*intervalForTest)+1; i++ {
-		block := randomBlock(basics.Round(i))
-		block.block.CurrentProtocol = protocol.ConsensusFuture
-		addBlockToAccountsUpdate(block.block, ao)
-	}
+
+	block := randomBlock(basics.Round(i))
+	block.block.CurrentProtocol = protocol.ConsensusFuture
+	addBlockToAccountsUpdate(block.block, ao)
 
 	a.Equal(recoveryIntervalForTests+1, uint64(len(ao.voters.votersForRoundCache)))
 	a.Equal(basics.Round(((i/intervalForTest)-recoveryIntervalForTests)*intervalForTest-lookbackForTest), ao.voters.lowestRound(basics.Round(i)))
 
-	// we add numOfIntervals*intervalForTest more blocks. the voter should have only recoveryIntervalForTests number of elements
-	for ; i < 3*(numOfIntervals*intervalForTest)+1; i++ {
-		block := randomBlock(basics.Round(i))
-		block.block.CurrentProtocol = protocol.ConsensusFuture
-		addBlockToAccountsUpdate(block.block, ao)
-	}
-
-	a.Equal(recoveryIntervalForTests+1, uint64(len(ao.voters.votersForRoundCache)))
-	a.Equal(basics.Round(((i/intervalForTest)-recoveryIntervalForTests)*intervalForTest-lookbackForTest), ao.voters.lowestRound(basics.Round(i)))
+	//// we add numOfIntervals*intervalForTest more blocks. the voter should have only recoveryIntervalForTests number of elements
+	//for ; i < 3*(numOfIntervals*intervalForTest)+1; i++ {
+	//	block := randomBlock(basics.Round(i))
+	//	block.block.CurrentProtocol = protocol.ConsensusFuture
+	//	addBlockToAccountsUpdate(block.block, ao)
+	//}
+	//
+	//a.Equal(recoveryIntervalForTests+1, uint64(len(ao.voters.votersForRoundCache)))
+	//a.Equal(basics.Round(((i/intervalForTest)-recoveryIntervalForTests)*intervalForTest-lookbackForTest), ao.voters.lowestRound(basics.Round(i)))
 }
 
 func TestTopNAccountsThatHaveNoMssKeys(t *testing.T) {
