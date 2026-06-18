@@ -13,12 +13,12 @@ require (
 	github.com/algorand/msgp v1.1.53
 	github.com/algorand/oapi-codegen v1.12.0-algorand.0
 	github.com/algorand/websocket v1.4.5
-	github.com/aws/aws-sdk-go v1.16.5
-	github.com/consensys/gnark-crypto v0.7.0
+	github.com/aws/aws-sdk-go v1.34.0
+	github.com/consensys/gnark-crypto v0.12.1
 	github.com/davidlazar/go-crypto v0.0.0-20170701192655-dcfb0a7ac018
 	github.com/dchest/siphash v1.2.1
 	github.com/fatih/color v1.7.0
-	github.com/getkin/kin-openapi v0.107.0
+	github.com/getkin/kin-openapi v0.131.0
 	github.com/gofrs/flock v0.7.0
 	github.com/golang/snappy v0.0.4
 	github.com/google/go-querystring v1.0.0
@@ -29,10 +29,10 @@ require (
 	github.com/mattn/go-sqlite3 v1.10.0
 	github.com/miekg/dns v1.1.27
 	github.com/olivere/elastic v6.2.14+incompatible
-	github.com/sirupsen/logrus v1.8.1
+	github.com/sirupsen/logrus v1.8.3
 	github.com/spf13/cobra v0.0.3
 	github.com/stretchr/testify v1.8.1
-	golang.org/x/crypto v0.1.0
+	golang.org/x/crypto v0.52.0
 	golang.org/x/sys v0.1.0
 	golang.org/x/text v0.4.0
 	gopkg.in/sohlich/elogrus.v3 v3.0.0-20180410122755-1fa29e2f2009
@@ -66,7 +66,7 @@ require (
 	github.com/stretchr/objx v0.5.0 // indirect
 	github.com/valyala/bytebufferpool v1.0.0 // indirect
 	github.com/valyala/fasttemplate v1.2.1 // indirect
-	golang.org/x/net v0.1.0 // indirect
+	golang.org/x/net v0.55.0 // indirect
 	golang.org/x/term v0.1.0 // indirect
 	golang.org/x/time v0.0.0-20201208040808-7e3f01d25324 // indirect
 	google.golang.org/appengine v1.6.7 // indirect
